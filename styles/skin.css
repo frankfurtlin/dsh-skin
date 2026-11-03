@@ -1,0 +1,98 @@
+/*
+ * dsh-skin — 视觉基座（只覆盖官方 token，不碰组件类名）
+ * =============================================================================
+ * 规则：本文件只允许出现两类内容
+ *   1) 定义/覆盖 DSH 官方 `--dsw-*` token（颜色、圆角、阴影、焦点环、滚动条）；
+ *   2) 作用于本插件自有属性 `html[data-dsh-skin]` 的少量规则。
+ * 不允许写 `[class*="…"]` 之类依赖别人 DOM 结构的选择器——那正是 DSH 升级
+ * 后"样式静默失效"和"插件互相打架"的来源。要改组件内部观感，先改 token。
+ *
+ * 调参入口：下面 `--skin-*` 四个变量是唯一需要改的东西。
+ * 改完必须跑 `npm run build && npm run check`（build 会校验每个 --dsw-* 名字
+ * 是否真实存在于当前 DSH 的 ui-theme 样式表里）。
+ */
+
+:root,
+html:root {
+  /* 用 `html:root`（特异性 0,1,1）而不是 `:root`（0,1,0）：官方 token 样式表
+   * 可能在我们之后插入，提高特异性才能保证覆盖与加载顺序无关。
+   * ---- 品牌旋钮（改这里） ---------------------------------------------- */
+  --skin-accent: #3b6fe0;          /* 主色：链接、焦点环、选中态 */
+  --skin-accent-soft: 24%;         /* 选中底色浓度 */
+  --skin-radius-step: 2px;         /* 圆角整体加厚量 */
+  --skin-shadow-slate: 15 23 42;   /* 阴影底色（rgb 分量） */
+
+  --dsw-focus-ring-color: var(--skin-accent);
+  --dsw-alias-state-business-primary: var(--skin-accent);
+  --dsw-alias-brand-primary-new-colorprimary-new-color: var(--skin-accent);
+  --dsw-alias-bg-document-selection: color-mix(in srgb, var(--skin-accent) var(--skin-accent-soft), transparent);
+
+  /* ---- 柔角：整站半径 +2px，面板更润 ---------------------------------- */
+  --dsw-radius-xs: calc(4px + var(--skin-radius-step));
+  --dsw-radius-sm: calc(8px + var(--skin-radius-step));
+  --dsw-radius-md: calc(12px + var(--skin-radius-step));
+  --dsw-radius-lg: calc(16px + var(--skin-radius-step));
+  --dsw-radius-xl: calc(20px + var(--skin-radius-step));
+  --dsw-radius-panel: calc(28px + var(--skin-radius-step));
+
+  /* ---- 阴影：更薄更散，抬升层级但不脏 -------------------------------- */
+  --dsw-shadow-lv1: 0 1px 2px 0 rgb(var(--skin-shadow-slate) / 6%), 0 1px 3px 0 rgb(var(--skin-shadow-slate) / 5%);
+  --dsw-shadow-lv2: 0 4px 12px -2px rgb(var(--skin-shadow-slate) / 9%), 0 2px 6px -2px rgb(var(--skin-shadow-slate) / 6%);
+  --dsw-shadow-lv3: 0 0 1px 0 rgb(0 0 0 / 22%), 0 16px 40px -8px rgb(var(--skin-shadow-slate) / 18%);
+
+  /* ---- 滚动条：主色淡淡参与，不抢视线 -------------------------------- */
+  --dsw-alias-scrollbar-bg-l1: color-mix(in srgb, var(--skin-accent) 22%, transparent);
+  --dsw-alias-scrollbar-bg-l2: color-mix(in srgb, var(--skin-accent) 26%, transparent);
+  --dsw-alias-scrollbar-hover-l1: color-mix(in srgb, var(--skin-accent) 48%, transparent);
+  --dsw-alias-scrollbar-hover-l2: color-mix(in srgb, var(--skin-accent) 52%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * 深色：官方把大部分 token 定义在 body[data-ds-dark-theme]（特异性高于 :root），
+ * 所以这里必须用同样高的选择器重新覆盖，否则深色下我们的浅色值会被压掉。
+ * ------------------------------------------------------------------------- */
+html body[data-ds-dark-theme],
+body[data-ds-dark-theme] {
+  --skin-accent: #7aa2ff;
+  --skin-accent-soft: 34%;
+  --skin-shadow-slate: 0 0 0;
+
+  --dsw-focus-ring-color: var(--skin-accent);
+  --dsw-alias-state-business-primary: var(--skin-accent);
+  --dsw-alias-brand-primary-new-colorprimary-new-color: var(--skin-accent);
+  --dsw-alias-bg-document-selection: color-mix(in srgb, var(--skin-accent) var(--skin-accent-soft), transparent);
+
+  --dsw-shadow-lv1: 0 1px 2px 0 rgb(0 0 0 / 40%);
+  --dsw-shadow-lv2: 0 4px 12px -2px rgb(0 0 0 / 45%), 0 2px 6px -2px rgb(0 0 0 / 35%);
+  --dsw-shadow-lv3: 0 0 1px 0 rgb(0 0 0 / 60%), 0 16px 40px -8px rgb(0 0 0 / 55%);
+
+  --dsw-alias-scrollbar-bg-l1: color-mix(in srgb, var(--skin-accent) 26%, transparent);
+  --dsw-alias-scrollbar-bg-l2: color-mix(in srgb, var(--skin-accent) 30%, transparent);
+  --dsw-alias-scrollbar-hover-l1: color-mix(in srgb, var(--skin-accent) 58%, transparent);
+  --dsw-alias-scrollbar-hover-l2: color-mix(in srgb, var(--skin-accent) 62%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+ * 自有作用域的可见改进：选区与焦点环统一到品牌色，浅/深一致。
+ * `html[data-dsh-skin]` 由 client.js 在注入时打上，保证这些规则只在插件生效
+ * 时出现（卸载插件后不残留任何影响）。
+ * ------------------------------------------------------------------------- */
+html[data-dsh-skin] ::selection {
+  background: color-mix(in srgb, var(--skin-accent) var(--skin-accent-soft), transparent);
+  color: inherit;
+}
+
+html[data-dsh-skin] :focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 var(--dsw-focus-ring-width, 2px)
+    color-mix(in srgb, var(--skin-accent) 55%, transparent);
+}
+
+/* 移动端不引入任何额外限制：token 覆盖本身对窄屏是安全的，
+ * 这里显式声明边界，避免以后有人往本文件里塞布局规则。 */
+@media (max-width: 1023px) {
+  html[data-dsh-skin] {
+    /* 仅保留上述 token 覆盖，不改布局（布局归 dsh-mobile-ux 管）。 */
+    --skin-mobile-note: none;
+  }
+}

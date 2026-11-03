@@ -1,0 +1,44 @@
+{
+  "name": "dsh-skin",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DSH 视觉基座插件：官方 theme token 覆盖（浅色/深色品牌配色、圆角、密度）+ 一小组只作用于自有 class 的可见改进。桌面默认生效，<=1023px 的移动端补丁不破坏 dsh-mobile-ux。",
+  "type": "module",
+  "license": "MIT",
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "default": "./index.js"
+    },
+    "./client": {
+      "default": "./client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "inject": [
+        "@deepseek-ai/dsh-client-locale"
+      ],
+      "platform": "web"
+    }
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "client-src",
+    "styles",
+    "scripts",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs --check",
+    "tokens": "node scripts/tokens.mjs",
+    "test": "node --test test/skin.test.mjs"
+  }
+}
