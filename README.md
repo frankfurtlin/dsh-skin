@@ -98,3 +98,12 @@ systemctl restart deepseek-harness.service
 
 卸载后页面里不再有 `style[data-dsh-skin]`，`html` 上的 `data-dsh-skin`
 属性也随之消失，不留残余影响。
+
+## 提交约定
+
+沿用 [Conventional Commits](https://www.conventionalcommits.org/)：`<type>(<scope>): <中文摘要>`。
+
+- `type`：`feat`（新功能）/ `fix`（修 bug）/ `docs` / `test` / `build` / `chore` / `refactor`
+- `scope`：受影响的部分，如 `host`、`client`、`panel`、`ai`、`layout`、`verify`
+- 摘要用祈使句、不加句号，控制在 50 字内；正文说明「为什么」和影响面
+- 一次提交只做一件事；改完必须跑过 `npm run check`（或等价）与对应的验收脚本
