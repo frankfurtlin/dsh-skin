@@ -4,11 +4,8 @@
 
 **只改官方 theme token 的 DSH 视觉基座：品牌配色、圆角、阴影、选区与滚动条，不碰组件类名、不 fork 本体、不注入 HTML。**
 
-A visual baseline for DSH that overrides official theme tokens only — brand colors, radii and shadows, with no CSS hacks on component classes.
-
 [![Version](https://img.shields.io/badge/version-0.1.0-blue)](package.json)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Platform](https://img.shields.io/badge/DSH-DeepSeek%20Harness-5b5ef7)](https://github.com/frankfurtlin/dsh-pocket)
 
 [English](README.md) · **简体中文**
 
