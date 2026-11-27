@@ -14,6 +14,7 @@
  */
 
 import { existsSync, readFileSync, writeFileSync, readdirSync } from 'node:fs'
+import { homedir } from 'node:os'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -41,11 +42,11 @@ function officialTokens() {
   if (process.env.DSH_UI_THEME_BUNDLE) candidates.push(process.env.DSH_UI_THEME_BUNDLE)
 
   // 常见全局安装布局：<prefix>/lib/node_modules/@deepseek-ai/dsh/node_modules/@deepseek-ai/dsh-client-ui-theme/lib/client.js
+  // 用户级布局（nvm 等）按运行时家目录推导，不写死某台机器的绝对路径。
   for (const prefix of [
-    '/root/.nvm/versions/node',
+    join(homedir(), '.nvm/versions/node'),
     '/usr/local/lib',
     '/usr/lib',
-    join(process.env.HOME ?? '/root', '.nvm/versions/node'),
   ]) {
     if (!existsSync(prefix)) continue
     let versions = []
