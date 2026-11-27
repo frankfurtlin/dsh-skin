@@ -24,8 +24,10 @@ In the browser console, `__dshSkin.status()` shows whether the stylesheet is in 
 
 ## Install
 
+The commands below assume the checkout is at `/opt/dsh/dsh-skin` — substitute your own path if it lives elsewhere.
+
 ```bash
-dsh plugin --profile web add /root/workspace/plugins/dsh-skin
+dsh plugin --profile web add /opt/dsh/dsh-skin
 # add "dsh-skin" to dsh.profile.bundles in the Web profile's package.json
 systemctl restart deepseek-harness.service
 curl -s http://127.0.0.1:3080/skin/status

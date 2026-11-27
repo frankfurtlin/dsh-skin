@@ -28,9 +28,11 @@ dsh-skin 换掉 DSH Web 的官方 `--dsw-*` theme token：品牌主色、选中�
 
 ## 安装
 
+下面的命令假设仓库检出在 `/opt/dsh/dsh-skin`，放在别处就替换成实际路径。
+
 ```bash
 # 1) 挂进 profile（pnpm 会重装 profile 依赖，事后 dsh-post-install-repair.path 会补补丁）
-dsh plugin --profile web add /root/workspace/plugins/dsh-skin
+dsh plugin --profile web add /opt/dsh/dsh-skin
 # 再把 "dsh-skin" 加进 profile package.json 的 dsh.profile.bundles
 
 # 2) 重启服务（客户端 bundle 由 host 组织，重载后浏览器需刷新页面）
@@ -77,7 +79,7 @@ DSH 的主题系统暴露 403 个 `--dsw-*` token（浅色定义在 `:root`，�
 改完必须重新构建，否则页面还是旧的：
 
 ```bash
-cd /root/workspace/plugins/dsh-skin
+cd /opt/dsh/dsh-skin
 npm run build     # 生成 client.js
 npm run check     # 与源一致 + token 名校验
 npm test          # 确定性门（node --test）
@@ -87,7 +89,7 @@ npm test          # 确定性门（node --test）
 
 ```bash
 # 1) 挂进 profile（pnpm 会重装 profile 依赖，事后 dsh-post-install-repair.path 会补补丁）
-dsh plugin --profile web add /root/workspace/plugins/dsh-skin
+dsh plugin --profile web add /opt/dsh/dsh-skin
 
 # 2) 重启服务（客户端 bundle 由 host 组织，重载后浏览器需刷新页面）
 systemctl restart deepseek-harness.service
@@ -111,9 +113,9 @@ __dshSkin.remount()  // 主题重载后手动重挂
 URL=$(journalctl -u deepseek-harness.service --since today | grep -o 'http://127.0.0.1:3080/?token=[A-Za-z0-9]*' | tail -1)
 
 # 2) 真浏览器验收：连续 13 项断言 + before/after 截图
-cd /root/workspace/plugins/dsh-skin
-PLAYWRIGHT_PATH=/root/workspace/hermes-site/tools/node_modules/playwright \
-  node scripts/verify-ui.mjs --url "$URL" --out /root/workspace/dsh-ext/docs/verification/skin
+cd /opt/dsh/dsh-skin
+PLAYWRIGHT_PATH=~/workspace/hermes-site/tools/node_modules/playwright \
+  node scripts/verify-ui.mjs --url "$URL" --out ~/workspace/dsh-ext/docs/verification/skin
 ```
 
 断言内容：`__dshSkin` 已挂载、样式表在 `head` 末尾、`html[data-dsh-skin]` 作用域、
