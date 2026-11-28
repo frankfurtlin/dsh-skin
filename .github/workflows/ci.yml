@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# CI 只需要读仓库
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check + test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # 本仓没有 npm 依赖（package.json 里没有 dependencies / devDependencies），
+      # 构建与测试只用 Node 内置模块，因此跳过 npm install，直接跑脚本。
+      - name: npm run check（client.js 与源码/样式表一致性）
+        run: npm run check
+
+      - name: npm test（node --test）
+        run: npm test
